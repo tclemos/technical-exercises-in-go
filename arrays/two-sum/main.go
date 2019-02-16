@@ -7,22 +7,35 @@ import (
 	"os"
 	"strconv"
 
+	arraytools "github.com/tclemos/technical-exercises-in-go/array-tools"
 	twosum "github.com/tclemos/technical-exercises-in-go/arrays/two-sum/lib"
+)
+
+type exitCodeReturner func(code int)
+
+var (
+	returnExitCode exitCodeReturner = func(code int) {
+		os.Exit(code)
+	}
 )
 
 func main() {
 
 	target, numbers, err := parseParameters()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print(err.Error())
+		returnExitCode(1)
+		return
 	}
 
 	i1, i2, v1, v2, err := twosum.Find(target, numbers)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print(err.Error())
+		returnExitCode(1)
+		return
 	}
 
-	log.Println(i1, i2, v1, v2)
+	log.Print(i1, i2, v1, v2)
 }
 
 // ParseParameters read all the command line arguments
@@ -59,37 +72,16 @@ func parseParameters() (target int, numbers []int, err error) {
 	// strconv.Atoi tries to convert a string into an int in base 10
 	target, err = strconv.Atoi(os.Args[1])
 	if err != nil {
-		return target, nil, fmt.Errorf("Target not valid: %s", err.Error())
+		return target, nil, fmt.Errorf("Invalid target value: Target should be a number and \"%s\" is not a number", os.Args[1])
 	}
 
 	// Inject all the other arguments into the func toIntSlice to convert
 	// all the string values into int values
-	numbers = toIntSlice(os.Args[2:])
-	if len(numbers) < 1 {
-		return 0, nil, errors.New("The collection of numbers should have at least 2 numbers")
+	numbers = arraytools.ToIntSlice(os.Args[2:])
+	if len(numbers) < 2 {
+		return 0, nil, errors.New("The collection of numbers must have at least 2 numbers")
 	}
 
 	// Once everything is correct, returns the target and the numbers without error.
 	return target, numbers, nil
-}
-
-// ToIntSlice converts a string slice into an int slice.
-//
-// All the non int compliant string values will be skipped
-// and it will always return an instance of slice and never returns nil
-func toIntSlice(entryValues []string) []int {
-
-	if entryValues == nil {
-		return make([]int, 0)
-	}
-
-	result := make([]int, 0)
-
-	for _, entryValue := range entryValues {
-		if convertedValue, err := strconv.Atoi(entryValue); err == nil {
-			result = append(result, convertedValue)
-		}
-	}
-
-	return result
 }

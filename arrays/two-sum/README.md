@@ -22,7 +22,7 @@
 # Usage
 All the numbers should be provided via command line arguments.
 
-- The first number will be consider as the __Target__, in the following exemple it is the number __9__.
+- The first number will be considered as the __Target__, in the following example it is the number __9__.
 - The rest of the numbers will be considered as the number collection to found the two numbers that matches the target when added, in the following example they are the numbers __2, 7, 11__ and __15__.
 
 > C:\\my-go-workspace\\bin\\> __twosum.exe 9 2 7 11 15__

@@ -1,8 +1,6 @@
 package twosum
 
-import (
-	"errors"
-)
+import "errors"
 
 // Find tries to find two numbers in the provided numbers
 // collection that when added up together will match the provided target
